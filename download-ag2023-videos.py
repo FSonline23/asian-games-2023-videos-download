@@ -29,6 +29,7 @@ for i in range(start_index, end_index + 1):
     # print(download_url)
     print(f"Downloading video index {str(i)} of {str(end_index)}...")
     output_name = f"{df['Sport Name'][i]} - {df['Episode Title'][i]} ({str(i + 1)}).mp4"
+    output_name = output_name.replace("|", "-").replace("#", "-").replace("&", "and").replace("*", "-").replace("?", "-").replace("<", "-").replace(">", "-").replace(":", "-").replace('"',"'")
     try:
         res = req.get(download_url, stream=True)
         file_size_mb = int(res.headers.get("Content-length")) / (1024 * 1024)
