@@ -1,7 +1,8 @@
-import pandas as pd
+import math
 import os
-import requests as req
+import pandas as pd
 import progressbar
+import requests as req
  
 widgets = [' [',
          progressbar.Timer(format= 'elapsed time: %(elapsed)s'),
@@ -30,9 +31,10 @@ for i in range(start_index, end_index + 1):
     print(f"Downloading video index {str(i)} of {str(end_index)}...")
     output_name = f"{df['Sport Name'][i]} - {df['Episode Title'][i]} ({str(i + 1)}).mp4"
     output_name = output_name.replace("|", "-").replace("#", "-").replace("&", "and").replace("*", "-").replace("?", "-").replace("<", "-").replace(">", "-").replace(":", "-").replace('"',"'")
+    print(output_name)
     try:
         res = req.get(download_url, stream=True)
-        file_size_mb = int(res.headers.get("Content-length")) / (1024 * 1024)
+        file_size_mb = math.ceil(int(res.headers.get("Content-length")) / (1024 * 1024))
         bar = progressbar.ProgressBar(max_value=file_size_mb, widgets=widgets).start()
         with open(os.path.join(os.getcwd(), df['Sport Name'][i], output_name), "wb") as f:
             counter = 0
